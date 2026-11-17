@@ -1,0 +1,8 @@
+[flake8]
+# E/W = pycodestyle (style), F = pyflakes (bugs), C90 = complexity, S = bandit (security)
+max-line-length = 100
+max-complexity = 10
+exclude = .git,.venv,__pycache__
+show-source = true
+statistics = true
+count = true
