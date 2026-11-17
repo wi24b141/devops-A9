@@ -6,3 +6,8 @@ exclude = .git,.venv,__pycache__
 show-source = true
 statistics = true
 count = true
+# False positives in tests only:
+#   S101 - pytest is built on plain `assert` statements
+#   S105/S106 - dummy credentials like "pw" are test fixtures, not real secrets
+per-file-ignores =
+    tests/*: S101,S105,S106

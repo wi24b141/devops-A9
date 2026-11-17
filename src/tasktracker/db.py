@@ -1,16 +1,15 @@
 import sqlite3
-import os
 
 DB_PATH = "tasks.db"
 
 
-def get_connection(path=DB_PATH):
-    conn = sqlite3.connect(path)
+def get_connection(path=None):
+    conn = sqlite3.connect(path or DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
 
-def init_db(path=DB_PATH):
+def init_db(path=None):
     conn = get_connection(path)
     conn.execute(
         "CREATE TABLE IF NOT EXISTS users ("
@@ -30,8 +29,9 @@ def init_db(path=DB_PATH):
 
 
 def find_tasks(conn, owner, search=""):
-    query = f"SELECT id, title, done FROM tasks WHERE owner = '{owner}' AND title LIKE '%{search}%'"
-    return conn.execute(query).fetchall()
+    # Parameterised query: user input is passed as data, never spliced into the SQL text.
+    query = "SELECT id, title, done FROM tasks WHERE owner = ? AND title LIKE ?"
+    return conn.execute(query, (owner, f"%{search}%")).fetchall()
 
 
 def add_task(conn, owner, title):
